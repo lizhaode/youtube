@@ -15,9 +15,8 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  prepare:
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.10
@@ -36,3 +35,9 @@ jobs:
       - name: start crawler
         run: |
           scrapy crawl youtuber
+      - name: package
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-artifact
+          path: path/to/artifact/
+    
