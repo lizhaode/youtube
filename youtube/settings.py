@@ -12,7 +12,7 @@ BOT_NAME = "youtube"
 SPIDER_MODULES = ["youtube.spiders"]
 NEWSPIDER_MODULE = "youtube.spiders"
 
-LOG_FILE = 'stdout.log'
+# LOG_FILE = 'stdout.log'
 LOG_LEVEL = 'ERROR'
 YOUTUBER = '@miaomiaolegs'
 DOWNLOAD_PATH = 'videos'
