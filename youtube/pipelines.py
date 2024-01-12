@@ -20,5 +20,5 @@ class YoutubePipeline:
         prepare_command = f'yt-dlp --embed-subs --sub-langs "zh-CN,en" --embed-thumbnail --embed-metadata --extractor-args "youtube:lang=zh-CN" --recode-video mp4 -P {path} -o "{video_title}.%(ext)s" https://www.youtube.com/watch?v={video_id}'
         spider.logger.error(f'execute: {prepare_command}')
         subprocess.run(
-            shlex.split(prepare_command), check=True, capture_output=True
+            shlex.split(prepare_command), check=True, capture_output=False
         )
