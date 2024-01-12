@@ -29,6 +29,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 pytest black isort
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Install Packages
+        uses: ConorMacBride/install-package@v1
+        with:
+          apt: ffmpeg
       - name: start crawler
         run: |
           scrapy crawl youtuber
