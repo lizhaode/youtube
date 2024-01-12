@@ -13,7 +13,9 @@ SPIDER_MODULES = ["youtube.spiders"]
 NEWSPIDER_MODULE = "youtube.spiders"
 
 LOG_FILE = 'stdout.log'
-
+LOG_LEVEL = 'ERROR'
+YOUTUBER = '@miaomiaolegs'
+DOWNLOAD_PATH = 'videos'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -64,9 +66,9 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    "youtube.pipelines.YoutubePipeline": 300,
-# }
+ITEM_PIPELINES = {
+    "youtube.pipelines.YoutubePipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -91,5 +93,3 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
-FEED_EXPORT_ENCODING = "utf-8"
