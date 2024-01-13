@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = "youtube.spiders"
 
 # LOG_FILE = 'stdout.log'
 LOG_LEVEL = 'ERROR'
-YOUTUBER = '@clplus'
+YOUTUBER = '@ProudFox520'
 DOWNLOAD_PATH = 'videos'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
