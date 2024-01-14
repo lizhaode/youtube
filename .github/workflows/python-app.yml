@@ -23,7 +23,6 @@ jobs:
           tool-cache: true
       - name: Delete huge unnecessary tools folder
         run: |
-          docker rmi $(docker image ls -aq)
           sudo apt-get update
           sudo snap remove lxd core20
           sudo apt autoremove -y --purge auapache2 java-common postgresql-14 postgresql-client-14 microsoft-edge-stable gcc gcc-9 gcc-10 gcc-11 gcc-12 gcc-13 heroku
