@@ -24,7 +24,8 @@ jobs:
       - name: Delete huge unnecessary tools folder
         run: |
           sudo apt-get update
-          sudo snap remove lxd core20
+          sudo snap remove lxd
+          sudo snap remove core20
           sudo apt autoremove -y --purge auapache2 java-common postgresql-14 postgresql-client-14 microsoft-edge-stable gcc gcc-9 gcc-10 gcc-11 gcc-12 gcc-13 heroku
           sudo apt-get remove -y 'php.*'
           sudo swapoff -a
