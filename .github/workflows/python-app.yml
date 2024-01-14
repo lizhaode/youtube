@@ -17,6 +17,8 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.3.1
       - name: Setup upterm session
         uses: mxschmitt/action-tmate@v3
       - name: Delete huge unnecessary tools folder
@@ -24,12 +26,9 @@ jobs:
           rm -rf /opt/hostedtoolcache
           docker rmi $(docker image ls -aq)
           sudo apt-get update
-          sudo apt autoremove -y --purge libstdc++-13-dev libpython3.10-dev humanity-icon-theme aspnetcore-runtime-7.0 monodoc-manual libruby3.0 mono-utils aspnetcore-runtime-8.0 liblapack-dev linux-headers-6.2.0-1018-azure clang-tidy-15 linux-azure-6.2-tools-6.2.0-1018 cpp-10 cpp-11 python-babel-localedata dotnet-targeting-pack-6.0 referenceassemblies-pcl cpp-9 g++-10 gfortran-10 libperl5.34 clang-tools-14 mono-llvm-support gfortran-11 g++-11 clang-tools-13 libgl1-mesa-dri gfortran-9 gcc-9 libclang1-14 g++-9 git dotnet-targeting-pack-7.0 libclang1-15 libclang1-13 vim-runtime cpp-12 clang-tools-15 gfortran-12 docker-ce-cli dotnet-targeting-pack-8.0 podman g++-12 gh r-base-core containernetworking-plugins llvm-13 msbuild libicu-dev llvm-14 kubectl postgresql-14 llvm-15 gcc-10 gcc-11 mecab-ipadic libclang-cpp13 libclang-cpp14 libclang-cpp15 mysql-client-core-8.0 mono-llvm-tools libclang-common-15-dev dotnet-runtime-6.0 gcc-12 dotnet-runtime-8.0 dotnet-runtime-7.0 libclang-common-14-dev docker-buildx-plugin libclang-common-13-dev linux-azure-6.2-headers-6.2.0-1018 docker-ce libllvm13 snapd libllvm14 mono-devel libllvm15 containerd.io mysql-server-core-8.0 linux-modules-6.2.0-1018-azure powershell cpp-13 gfortran-13 g++-13 temurin-8-jdk gcc-13 firefox llvm-13-dev llvm-14-dev llvm-15-dev temurin-11-jdk temurin-17-jdk google-chrome-stable dotnet-sdk-6.0 temurin-21-jdk dotnet-sdk-8.0 dotnet-sdk-7.0 microsoft-edge-stable google-cloud-cli azure-cli
+          # sudo apt autoremove -y --purge libstdc++-13-dev libpython3.10-dev humanity-icon-theme aspnetcore-runtime-7.0 monodoc-manual libruby3.0 mono-utils aspnetcore-runtime-8.0 liblapack-dev linux-headers-6.2.0-1018-azure clang-tidy-15 linux-azure-6.2-tools-6.2.0-1018 cpp-10 cpp-11 python-babel-localedata dotnet-targeting-pack-6.0 referenceassemblies-pcl cpp-9 g++-10 gfortran-10 libperl5.34 clang-tools-14 mono-llvm-support gfortran-11 g++-11 clang-tools-13 libgl1-mesa-dri gfortran-9 gcc-9 libclang1-14 g++-9 git dotnet-targeting-pack-7.0 libclang1-15 libclang1-13 vim-runtime cpp-12 clang-tools-15 gfortran-12 docker-ce-cli dotnet-targeting-pack-8.0 podman g++-12 gh r-base-core containernetworking-plugins llvm-13 msbuild libicu-dev llvm-14 kubectl postgresql-14 llvm-15 gcc-10 gcc-11 mecab-ipadic libclang-cpp13 libclang-cpp14 libclang-cpp15 mysql-client-core-8.0 mono-llvm-tools libclang-common-15-dev dotnet-runtime-6.0 gcc-12 dotnet-runtime-8.0 dotnet-runtime-7.0 libclang-common-14-dev docker-buildx-plugin libclang-common-13-dev linux-azure-6.2-headers-6.2.0-1018 docker-ce libllvm13 snapd libllvm14 mono-devel libllvm15 containerd.io mysql-server-core-8.0 linux-modules-6.2.0-1018-azure powershell cpp-13 gfortran-13 g++-13 temurin-8-jdk gcc-13 firefox llvm-13-dev llvm-14-dev llvm-15-dev temurin-11-jdk temurin-17-jdk google-chrome-stable dotnet-sdk-6.0 temurin-21-jdk dotnet-sdk-8.0 dotnet-sdk-7.0 microsoft-edge-stable google-cloud-cli azure-cli
           sudo apt-get autoremove -y 
-          sudo apt-get remove -y '^dotnet-.*'
-          sudo apt-get remove -y '^llvm-.*'
           sudo apt-get remove -y 'php.*'
-          sudo apt-get clean
           sudo swapoff -a
           sudo rm -f /swapfile
           df -h
