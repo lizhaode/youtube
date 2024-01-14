@@ -30,11 +30,9 @@ jobs:
           sudo apt-get remove -y 'php.*'
           sudo swapoff -a
           sudo rm -f /swapfile
-          sudo rm -rf /usr/local/lib/node_modules /usr/local/aws-cli /usr/local/aws-sam-cli /usr/local/n /usr/local/julia1.10.0 /usr/local/share/chromium /usr/local/share/powershell /usr/share/swift /usr/share/gradle-8.5 /usr/share/miniconda /usr/share/sbt /usr/share/az_9.3.0 /usr/share/kotlinc /usr/local/bin/aliyun azcopy pulumi* minikube node oc
+          sudo rm -rf /usr/local/lib/node_modules /usr/local/aws-cli /usr/local/aws-sam-cli /usr/local/n /usr/local/julia1.10.0 /usr/local/share/chromium /usr/local/share/powershell /usr/share/swift /usr/share/gradle-8.5 /usr/share/miniconda /usr/share/sbt /usr/share/az_9.3.0 /usr/share/kotlinc /usr/local/bin/aliyun /usr/local/bin/azcopy /usr/local/bin/pulumi* /usr/local/bin/minikube /usr/local/bin/node /usr/local/bin/oc
           sudo rm -rf /opt/hostedtoolcache
           df -h
-      - name: Setup upterm session
-        uses: mxschmitt/action-tmate@v3
       - uses: actions/checkout@v3
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
