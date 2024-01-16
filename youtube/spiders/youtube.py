@@ -5,7 +5,6 @@ import scrapy
 from scrapy import Request
 from scrapy.exceptions import CloseSpider
 from scrapy.http import JsonRequest, Response
-from zhconv import convert
 
 from youtube.items import YoutubeItem
 
@@ -107,7 +106,7 @@ class Youtuber(scrapy.Spider):
                         .get('content')
                         .get('videoRenderer')
                         .get('videoId'),
-                        video_title=convert(
+                        video_title=
                             info.get('richItemRenderer')
                             .get('content')
                             .get('videoRenderer')
@@ -115,7 +114,6 @@ class Youtuber(scrapy.Spider):
                             .get('runs')[0]
                             .get('text'),
                             'zh-cn',
-                        ),
                     ),
                 )
             elif 'continuationItemRenderer' in info:
