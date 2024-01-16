@@ -17,7 +17,7 @@ class YoutubePipeline:
         video_id = item.get('video_id')
         video_title = item.get('video_title')
         path = spider.settings.get('DOWNLOAD_PATH')
-        prepare_command = f'yt-dlp --embed-subs --sub-langs "zh,en" --embed-metadata --extractor-args "youtube:lang=zh-CN" -P {path} -o "{video_title}.%(ext)s" https://www.youtube.com/watch?v={video_id}'
+        prepare_command = f'yt-dlp --embed-subs --sub-langs "zh,en" -S "quality,ext" --extractor-args "youtube:lang=zh-CN" -P {path} -o "{video_title}.%(ext)s" https://www.youtube.com/watch?v={video_id}'
         spider.logger.error(f'execute: {prepare_command}')
         subprocess.run(
             shlex.split(prepare_command), check=True, capture_output=False
