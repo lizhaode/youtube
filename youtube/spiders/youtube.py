@@ -13,9 +13,7 @@ class Youtuber(scrapy.Spider):
     name = 'youtuber'
 
     def start_requests(self) -> Iterable[Request]:
-        yield Request(
-            f'https://www.youtube.com/{self.settings.get("YOUTUBER")}/videos'
-        )
+        yield Request(f'https://www.youtube.com/{self.settings.get("YOUTUBER")}/videos')
 
     def parse(self, response: Response, **kwargs: Any) -> Any:
         head_script_gen = filter(
@@ -57,9 +55,7 @@ class Youtuber(scrapy.Spider):
             .get('richGridRenderer')
             .get('contents')
         )
-        item_list, req = self.parse_json_video_info(
-            video_contents, url_api_key, json_body_context
-        )
+        item_list, req = self.parse_json_video_info(video_contents, url_api_key, json_body_context)
         yield req
         for i in item_list:
             yield i
@@ -80,42 +76,27 @@ class Youtuber(scrapy.Spider):
         for i in item_list:
             yield i
 
-    def parse_json_video_info(
-        self, video_contents: list[dict], api_key: str, context: str
-    ) -> tuple:
+    def parse_json_video_info(self, video_contents: list[dict], api_key: str, context: str) -> tuple:
         item_list = []
         request = None
         for info in video_contents:
             if 'richItemRenderer' in info:
-                if (
-                    len(
-                        info.get('richItemRenderer')
-                        .get('content')
-                        .get('videoRenderer')
-                        .get('title')
-                        .get('runs')
-                    )
-                    != 1
-                ):
+                if len(info.get('richItemRenderer').get('content').get('videoRenderer').get('title').get('runs')) != 1:
                     self.logger.error(
                         f"video title unexpected: {info.get('richItemRenderer').get('content').get('videoRenderer').get('title').get('runs')}"
                     )
                 item_list += (
                     YoutubeItem(
-                        video_id=info.get('richItemRenderer')
+                        video_id=info.get('richItemRenderer').get('content').get('videoRenderer').get('videoId'),
+                        video_title=info.get('richItemRenderer')
                         .get('content')
                         .get('videoRenderer')
-                        .get('videoId'),
-                        video_title=
-                            info.get('richItemRenderer')
-                            .get('content')
-                            .get('videoRenderer')
-                            .get('title')
-                            .get('runs')[0]
-                            .get('text'),
-                            'zh-cn',
+                        .get('title')
+                        .get('runs')[0]
+                        .get('text'),
                     ),
                 )
+
             elif 'continuationItemRenderer' in info:
                 request = JsonRequest(
                     url=f'https://www.youtube.com/youtubei/v1/browse?key={api_key}&prettyPrint=false',
