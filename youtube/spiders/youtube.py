@@ -1,10 +1,11 @@
 from typing import Any, Iterable
 
-import js2py
 import scrapy
+import yaml
 from scrapy import Request
 from scrapy.exceptions import CloseSpider
 from scrapy.http import JsonRequest, Response
+from zhconv import convert
 
 from youtube.items import YoutubeItem
 
@@ -17,21 +18,12 @@ class Youtuber(scrapy.Spider):
 
     def parse(self, response: Response, **kwargs: Any) -> Any:
         head_script_gen = filter(
-            lambda x: 'var ytcfg=' in x or 'window.ytplayer={}' in x,
+            lambda x: 'window.ytplayer={}' in x,
             response.css('head').css('script').getall(),
         )
-        head_script_js = next(head_script_gen).split('">')[1].strip('</script>')
-        head_script_js = (
-            head_script_js
-            + next(head_script_gen)
-            .split('ytplayer={};')[1]
-            .split('window.ytcfg.obfuscatedData')[0]
-            .strip('</script>')
-            .strip()
-        )
-        ytcfg = js2py.eval_js(head_script_js + 'ytcfg').to_dict()
-        url_api_key = ytcfg.get('data_').get('INNERTUBE_API_KEY')
-        json_body_context = ytcfg.get('data_').get('INNERTUBE_CONTEXT')
+        head_script_js = yaml.safe_load(next(head_script_gen).split('ytcfg.set(')[1].split(');')[0])
+        url_api_key = head_script_js.get('INNERTUBE_API_KEY')
+        json_body_context = head_script_js.get('INNERTUBE_CONTEXT')
 
         if (not url_api_key) or (not json_body_context):
             self.logger.error('next video page request can not create')
@@ -43,10 +35,9 @@ class Youtuber(scrapy.Spider):
                 response.css('body').css('script').getall(),
             )
         )
-        body_script_js = body_script_js.split('>')[1].strip('</script')
+        body_script_js = body_script_js.split('>')[1].strip('</script').replace('var ytInitialData =', '').strip()[:-1]
         video_contents = (
-            js2py.eval_js(body_script_js)
-            .to_dict()
+            yaml.safe_load(body_script_js)
             .get('contents')
             .get('twoColumnBrowseResultsRenderer')
             .get('tabs')[1]
@@ -88,12 +79,15 @@ class Youtuber(scrapy.Spider):
                 item_list += (
                     YoutubeItem(
                         video_id=info.get('richItemRenderer').get('content').get('videoRenderer').get('videoId'),
-                        video_title=info.get('richItemRenderer')
-                        .get('content')
-                        .get('videoRenderer')
-                        .get('title')
-                        .get('runs')[0]
-                        .get('text'),
+                        video_title=convert(
+                            info.get('richItemRenderer')
+                            .get('content')
+                            .get('videoRenderer')
+                            .get('title')
+                            .get('runs')[0]
+                            .get('text'),
+                            'zh-cn',
+                        ),
                     ),
                 )
 

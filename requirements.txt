@@ -1,4 +1,4 @@
 scrapy
 yt-dlp
 zhconv
-js2py
+pyyaml
