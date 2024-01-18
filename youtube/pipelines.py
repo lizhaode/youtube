@@ -3,6 +3,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 import shlex
+import base64
 import subprocess
 
 # useful for handling different item types with a single interface
@@ -15,7 +16,10 @@ class YoutubePipeline:
         if not isinstance(item, YoutubeItem):
             return item
         video_id = item.get('video_id')
-        video_title = item.get('video_title')
+        if spider.settings.getbool('FILE_NAME_BASE64'):
+            video_title = base64.b64encode(item.get('video_title').encode()).decode()
+        else:
+            video_title = item.get('video_title')
         path = spider.settings.get('DOWNLOAD_PATH')
         prepare_command = f'yt-dlp --embed-subs --sub-langs "zh,en" -S "quality,ext" --extractor-args "youtube:lang=zh-CN" -P {path} -o "{video_title}.%(ext)s" https://www.youtube.com/watch?v={video_id}'
         spider.logger.error(f'execute: {prepare_command}')
