@@ -3,8 +3,8 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 import shlex
-import base64
 import subprocess
+import urllib.parse
 
 # useful for handling different item types with a single interface
 from youtube.items import YoutubeItem
@@ -17,7 +17,7 @@ class YoutubePipeline:
             return item
         video_id = item.get('video_id')
         if spider.settings.getbool('FILE_NAME_BASE64'):
-            video_title = base64.b64encode(item.get('video_title').encode()).decode()
+            video_title = urllib.parse.quote(item.get('video_title'))
         else:
             video_title = item.get('video_title')
         path = spider.settings.get('DOWNLOAD_PATH')
