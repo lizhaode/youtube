@@ -16,7 +16,6 @@ NEWSPIDER_MODULE = "youtube.spiders"
 LOG_LEVEL = 'ERROR'
 YOUTUBER = '@user-um1ec3zb7w'
 DOWNLOAD_PATH = 'videos'
-FILE_NAME_BASE64 = True
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
