@@ -13,8 +13,8 @@ SPIDER_MODULES = ["youtube.spiders"]
 NEWSPIDER_MODULE = "youtube.spiders"
 
 # LOG_FILE = 'stdout.log'
-LOG_LEVEL = 'ERROR'
-YOUTUBER = '@user-um1ec3zb7w'
+LOG_LEVEL = 'WARN'
+YOUTUBER_LIST = ['@user-um1ec3zb7w', '@miaomiaolegs', '@MVJVRLyricMV']
 DOWNLOAD_PATH = 'videos'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

@@ -11,3 +11,4 @@ class YoutubeItem(scrapy.Item):
     # name = scrapy.Field()
     video_id = scrapy.Field()
     video_title = scrapy.Field()
+    youtuber = scrapy.Field()

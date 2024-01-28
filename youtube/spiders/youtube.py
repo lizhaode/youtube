@@ -14,9 +14,11 @@ class Youtuber(scrapy.Spider):
     name = 'youtuber'
 
     def start_requests(self) -> Iterable[Request]:
-        yield Request(f'https://www.youtube.com/{self.settings.get("YOUTUBER")}/videos')
+        for youtuber in self.settings.getlist("YOUTUBER_LIST"):
+            yield Request(f'https://www.youtube.com/{youtuber}/videos')
 
     def parse(self, response: Response, **kwargs: Any) -> Any:
+        youtuber_name = response.css('title::text').get().split('-')[0].strip()
         head_script_gen = filter(
             lambda x: 'window.ytplayer={}' in x,
             response.css('head').css('script').getall(),
@@ -32,10 +34,10 @@ class Youtuber(scrapy.Spider):
         body_script_js = next(
             filter(
                 lambda x: 'ytInitialData' in x,
-                response.css('body').css('script').getall(),
+                response.css('body').css('script::text').getall(),
             )
         )
-        body_script_js = body_script_js.split('>')[1].strip('</script').replace('var ytInitialData =', '').strip()[:-1]
+        body_script_js = body_script_js.replace('var ytInitialData =', '').strip(';')
         video_contents = (
             yaml.safe_load(body_script_js)
             .get('contents')
@@ -46,7 +48,7 @@ class Youtuber(scrapy.Spider):
             .get('richGridRenderer')
             .get('contents')
         )
-        item_list, req = self.parse_json_video_info(video_contents, url_api_key, json_body_context)
+        item_list, req = self.parse_json_video_info(video_contents, youtuber_name, url_api_key, json_body_context)
         yield req
         for i in item_list:
             yield i
@@ -60,6 +62,7 @@ class Youtuber(scrapy.Spider):
         )
         item_list, req = self.parse_json_video_info(
             video_contents,
+            response.cb_kwargs.get('youtuber_name'),
             response.cb_kwargs.get('api_key'),
             response.cb_kwargs.get('context'),
         )
@@ -67,7 +70,9 @@ class Youtuber(scrapy.Spider):
         for i in item_list:
             yield i
 
-    def parse_json_video_info(self, video_contents: list[dict], api_key: str, context: str) -> tuple:
+    def parse_json_video_info(
+        self, video_contents: list[dict], youtuber_name: str, api_key: str, context: str
+    ) -> tuple:
         item_list = []
         request = None
         for info in video_contents:
@@ -88,6 +93,7 @@ class Youtuber(scrapy.Spider):
                             .get('text'),
                             'zh-cn',
                         ),
+                        youtuber=youtuber_name,
                     ),
                 )
 
@@ -102,7 +108,7 @@ class Youtuber(scrapy.Spider):
                         .get('token'),
                     },
                     callback=self.next_page,
-                    cb_kwargs={'api_key': api_key, 'context': context},
+                    cb_kwargs={'api_key': api_key, 'context': context, 'youtuber_name': youtuber_name},
                 )
-        self.logger.error(f'got {len(item_list)} videos')
+        self.logger.warning(f'from {youtuber_name} got {len(item_list)} videos')
         return item_list, request
