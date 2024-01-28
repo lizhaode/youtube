@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = "youtube.spiders"
 
 # LOG_FILE = 'stdout.log'
 LOG_LEVEL = 'WARN'
-YOUTUBER_LIST = ['@user-um1ec3zb7w', '@miaomiaolegs', '@MVJVRLyricMV']
+YOUTUBER_LIST = ['@user-um1ec3zb7w', '@miaomiaolegs', '@WhatsLoveNO2']
 DOWNLOAD_PATH = 'videos'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
