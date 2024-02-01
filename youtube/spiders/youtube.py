@@ -38,7 +38,7 @@ class Youtuber(scrapy.Spider):
             .strip(';')
         )
         video_contents = (
-            yaml.safe_load(body_script_js)
+            yaml.safe_load(body_script)
             .get('contents')
             .get('twoColumnBrowseResultsRenderer')
             .get('tabs')[1]
