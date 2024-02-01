@@ -19,25 +19,24 @@ class Youtuber(scrapy.Spider):
 
     def parse(self, response: Response, **kwargs: Any) -> Any:
         youtuber_name = response.css('title::text').get().split('-')[0].strip()
-        head_script_gen = filter(
-            lambda x: 'window.ytplayer={}' in x,
-            response.css('head').css('script').getall(),
+        
+        head_script = yaml.safe_load(
+            [head_js for head_js in response.css('head').css('script').getall() if 'window.ytplayer={}' in head_js][0]
+            .split('ytcfg.set(')[1]
+            .split(');')[0]
         )
-        head_script_js = yaml.safe_load(next(head_script_gen).split('ytcfg.set(')[1].split(');')[0])
-        url_api_key = head_script_js.get('INNERTUBE_API_KEY')
-        json_body_context = head_script_js.get('INNERTUBE_CONTEXT')
+        url_api_key = head_script.get('INNERTUBE_API_KEY')
+        json_body_context = head_script.get('INNERTUBE_CONTEXT')
 
         if (not url_api_key) or (not json_body_context):
             self.logger.error('next video page request can not create')
             raise CloseSpider('unexpected error')
 
-        body_script_js = next(
-            filter(
-                lambda x: 'ytInitialData' in x,
-                response.css('body').css('script::text').getall(),
-            )
+        body_script = (
+            [body_js for body_js in response.css('body').css('script::text').getall() if 'ytInitialData' in body_js][0]
+            .replace('var ytInitialData =', '')
+            .strip(';')
         )
-        body_script_js = body_script_js.replace('var ytInitialData =', '').strip(';')
         video_contents = (
             yaml.safe_load(body_script_js)
             .get('contents')
