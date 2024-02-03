@@ -13,8 +13,15 @@ def start_down(command: str) -> None:
     with open(os.path.join(DOWNLOAD_PATH, parent_path, 'file_info.json')) as info:
         file_info = json.load(info)
     print(f'[{datetime.today().strftime("%Y-%m-%d %H:%M:%S")}] start to download: {file_info.get(file_number)}')
-    subprocess.run(shlex.split(command), capture_output=True, check=True)
-    print(f'[{datetime.today().strftime("%Y-%m-%d %H:%M:%S")}] success downloaded: {file_info.get(file_number)}')
+    try:
+        subprocess.run(
+            shlex.split(command),
+            capture_output=True,
+            check=True,
+        )
+        print(f'[{datetime.today().strftime("%Y-%m-%d %H:%M:%S")}] success downloaded: {file_info.get(file_number)}')
+    except subprocess.CalledProcessError as e:
+        print(f'[{datetime.today().strftime("%Y-%m-%d %H:%M:%S")}] failed downloaded: {file_info.get(file_number)}')
 
 
 if __name__ == '__main__':
