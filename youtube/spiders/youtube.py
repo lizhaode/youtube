@@ -19,7 +19,7 @@ class Youtuber(scrapy.Spider):
 
     def parse(self, response: Response, **kwargs: Any) -> Any:
         youtuber_name = response.css('title::text').get().split('-')[0].strip()
-        
+
         head_script = yaml.safe_load(
             [head_js for head_js in response.css('head').css('script').getall() if 'window.ytplayer={}' in head_js][0]
             .split('ytcfg.set(')[1]
